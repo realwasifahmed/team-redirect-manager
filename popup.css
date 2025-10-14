@@ -1,0 +1,170 @@
+/* =============== Base Layout =============== */
+body {
+  background: #f3f4f6;
+  font-family: "Inter", system-ui, sans-serif;
+  color: #1f2937;
+  margin: 0;
+  padding: 0;
+  width: 360px;
+  min-height: 480px;
+}
+
+.container {
+  padding: 1.25rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.25rem;
+}
+
+/* =============== Form Card =============== */
+.card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+  margin-top: 0.75rem;
+}
+
+.domain-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.input.short {
+  flex: 1;
+}
+
+.input.full {
+  width: 100%;
+}
+
+.tld {
+  background: #f3f4f6;
+  color: #4b5563;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: 1px solid #d1d5db;
+}
+
+.btn {
+  margin-top: 0.75rem;
+  width: 100%;
+  background: #2563eb;
+  color: white;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* =============== Mapping List =============== */
+.list {
+  margin-top: 0.75rem;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  transition: box-shadow 0.15s;
+}
+
+.list-item:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.list-item a {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.list-item a:hover {
+  text-decoration: underline;
+}
+
+.list-item .key {
+  font-weight: 500;
+  color: #111827;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.delete-btn:hover {
+  color: #b91c1c;
+}
+
+/* =============== Footer =============== */
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 1rem;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirect Manager</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>⚙️ Team Redirect Manager</h2>
+      <p class="subtitle">
+        Manage your <strong>.test</strong> redirects easily
+      </p>
+
+      <div class="card">
+        <label for="name" class="label">Short name</label>
+        <div class="domain-row">
+          <input
+            id="name"
+            type="text"
+            placeholder="e.g. client1"
+            class="input short"
+          />
+          <span class="tld">.test</span>
+        </div>
+        <div class="full">
+          <label for="url" class="label">Destination URL</label>
+          <input
+            id="url"
+            type="url"
+            placeholder="https://client1.vercel.app"
+            class="input"
+            style="width: 90%"
+          />
+        </div>
+
+        <button id="add" class="btn">Add / Update</button>
+      </div>
+
+      <h3 class="section-title">Saved Mappings</h3>
+      <div id="list" class="list"></div>
+
+      <footer>
+        <p>🌐 Works only for <strong>.test</strong> domains</p>
+      </footer>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
