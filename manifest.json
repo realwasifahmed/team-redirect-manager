@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Team Redirect Manager",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Manage and redirect .test domains locally for your team.",
   "permissions": ["storage", "webNavigation", "tabs"],
   "host_permissions": ["<all_urls>"],
+  "omnibox": { "keyword": "site" },
   "background": {
     "service_worker": "background.js"
   },

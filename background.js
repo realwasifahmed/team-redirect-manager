@@ -12,7 +12,46 @@ chrome.storage.onChanged.addListener((changes) => {
   }
 });
 
-// Listen to any navigation event
+// Handle omnibox suggestions (command: 'site')
+chrome.omnibox.onInputChanged.addListener((text, suggest) => {
+  const results = Object.entries(mappings)
+    .filter(([key]) => key.toLowerCase().includes(text.toLowerCase()))
+    .map(([key, url]) => ({
+      content: `${key}.test`, // what will be inserted when user selects
+      description: `<match>${key}.test</match> → <url>${url}</url>`,
+    }));
+
+  // If no match found, offer to open the raw .test domain
+  if (results.length === 0 && text.trim()) {
+    results.push({
+      content: `${text}.test`,
+      description: `<match>${text}.test</match> → <dim>no redirect saved</dim>`,
+    });
+  }
+
+  suggest(results);
+});
+
+// Handle command execution
+chrome.omnibox.onInputEntered.addListener((text) => {
+  const key = text.replace(".test", "").trim();
+  const redirectBase = mappings[key];
+  let url;
+
+  if (redirectBase) {
+    url = redirectBase;
+  } else {
+    url = `https://${key}.test`;
+  }
+
+  if (!/^https?:\/\//i.test(url)) {
+    url = "https://" + url;
+  }
+
+  chrome.tabs.update({ url });
+});
+
+// Listen to any navigation event (your existing redirect logic)
 chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   try {
     const url = new URL(details.url);
@@ -30,7 +69,9 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
       newUrl.search = url.search;
       newUrl.hash = url.hash;
 
-      console.log(`Redirecting ${url.hostname}${url.pathname} → ${newUrl.href}`);
+      console.log(
+        `Redirecting ${url.hostname}${url.pathname} → ${newUrl.href}`
+      );
       chrome.tabs.update(details.tabId, { url: newUrl.href });
     }
   } catch (err) {
