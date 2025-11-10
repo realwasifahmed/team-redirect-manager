@@ -1,9 +1,3 @@
-Absolutely — let’s create a **new, polished and updated README** for your improved version (`v1.2`) that now includes your **Omnibox command system (`site`)** with smart autocomplete and redirect preview.
-
-Here’s the updated version 👇
-
----
-
 # 🧭 Team Redirect Manager
 
 **Version:** 1.2
