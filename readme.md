@@ -1,30 +1,72 @@
 # 🧭 Team Redirect Manager
 
-**Version:** 1.2
+**Version:** 1.3
 **Author:** Wasif Ahmed
-**Description:**
-Team Redirect Manager is a powerful Chrome extension for developers and teams that automatically redirects local `.test` domains (like `client1.test`) to real project URLs (like `https://client1.vercel.app`).
-Now enhanced with a **command system (`site`)** that lets you access redirects directly from Chrome’s address bar — complete with smart suggestions and instant navigation.
+
+**Team Redirect Manager** is a powerful Chrome extension for developers and teams that allows redirecting local `.test` domains (like `client1.test`) to real project URLs (like `https://client1.vercel.app`).
+
+Now upgraded with:
+
+* 🔐 **Supabase authentication (Login / Signup)**
+* ☁️ **Cloud-sync redirects per user**
+* 🔄 **Local → Cloud migration system**
+* 🧩 **Merged loading (instant local + background cloud)**
+* 🔑 **Secure key handling using `supabase-example.js`**
+* 💬 **Smart Omnibox command (`site`) with autocomplete suggestions**
 
 ---
 
-## 🚀 Features
+# 🚀 Features
 
-* 🔁 **Automatic Redirects:** Instantly redirect any `.test` domain to its mapped live URL.
-* 🧩 **Popup Interface:** Add, update, or remove redirects with an intuitive UI.
-* 💾 **Persistent Storage:** Uses Chrome’s local storage to remember all mappings.
-* ⚙️ **Full URL Preservation:** Keeps your paths, queries, and hash fragments intact.
-* 💡 **New! Omnibox Command (`site`):**
+### 🔁 Automatic Redirects
 
-  * Type `site` + space in Chrome’s address bar to trigger command mode.
-  * Get live suggestions like `client1.test → https://client1.vercel.app`.
-  * Hit **Enter** to open the mapped site instantly.
-* 🔎 **Search-as-you-type:** Autocomplete suggestions appear dynamically as you type.
-* 🌐 **Works Everywhere:** Active across all tabs and browser sessions.
+Redirect `.test` domains to mapped URLs automatically.
+
+### 🧩 Popup Interface
+
+Add/update/delete redirects with a clean UI.
+
+### 💾 Local + Cloud Storage
+
+* Saved locally for instant load
+* Synced to Supabase for cloud backup
+* Auto-merged for best experience
+
+### 🔄 Automatic Migration
+
+Old local mappings are migrated to Supabase once after login.
+
+### ☁️ User-based Data Sync
+
+Each user gets their own redirect table entries.
+
+### 🗑️ Safe Delete
+
+Redirects prompt a confirmation before deletion both locally and from cloud.
+
+### 🔐 Logout
+
+Secure Supabase sign-out with local cache clearing.
+
+### 💡 Omnibox Command (`site`)
+
+Type:
+
+```
+site client
+```
+
+And instantly get:
+
+```
+client1.test → https://client1.vercel.app
+```
+
+Press **Enter** to navigate instantly.
 
 ---
 
-## 📁 File Structure
+# 📁 File Structure
 
 ```
 Team-Redirect-Manager/
@@ -34,147 +76,247 @@ Team-Redirect-Manager/
 ├── popup.html
 ├── popup.js
 ├── popup.css
+├── auth.html
+├── auth.js
+├── auth.css
+├── auth-check.js
+│
+├── supabase-lib.js             # Supabase JS library (local, CSP-compliant)
+├── supabase.js                 # Your REAL keys (IGNORED from Git)
+├── supabase-example.js         # Template to commit for others
+│
 └── icons/
     └── icon128.png
 ```
 
 ---
 
-## ⚙️ How It Works
+# 🛠️ Supabase Setup (Required)
 
-### 🧠 1. Background Script (`background.js`)
+To run this extension with cloud sync, you must set up Supabase.
 
-Handles two major features:
+### 1. Create a Supabase project
 
-#### 🔄 Redirect Logic
+Go to: [https://supabase.com](https://supabase.com)
 
-* Intercepts `.test` domain navigations via `chrome.webNavigation.onBeforeNavigate`.
-* Checks stored mappings and redirects the tab to its corresponding URL.
-* Automatically preserves:
+### 2. Create a table:
 
-  * Pathname
-  * Query parameters
-  * Hash fragments
+#### `redirects` table
 
-**Example:**
+| Column     | Type      | Notes           |
+| ---------- | --------- | --------------- |
+| id         | uuid      | default uuid()  |
+| user_id    | uuid      | required        |
+| key        | text      | redirect name   |
+| url        | text      | redirect target |
+| created_at | timestamp | auto            |
+
+---
+
+# 🔐 Required RLS Policies (IMPORTANT)
+
+Go to **Auth → Policies** in Supabase and add these:
+
+### SELECT
+
+```sql
+auth.uid() = user_id
+```
+
+### INSERT
+
+```sql
+auth.uid() = user_id
+```
+
+### UPDATE
+
+```sql
+auth.uid() = user_id
+```
+
+### DELETE
+
+```sql
+auth.uid() = user_id
+```
+
+This ensures **each user only accesses their own redirects**.
+
+---
+
+# 🔑 Supabase Keys Setup (IMPORTANT)
+
+Supabase keys must be loaded **locally** for Chrome extensions due to strict CSP rules.
+
+### 1. You will see this file in the repo:
 
 ```
-client1.test/about?ref=menu#team → https://client1.vercel.app/about?ref=menu#team
+supabase-example.js
 ```
 
-#### 💬 Omnibox Command System
+Contents:
 
-* Declared with keyword `"site"` in `manifest.json`.
-* When the user types `site` in the Chrome address bar:
+```js
+const SUPABASE_URL = "YOUR_URL_HERE";
+const SUPABASE_ANON_KEY = "YOUR_ANON_KEY_HERE";
 
-  * Suggestions appear for matching `.test` mappings.
-  * Each suggestion shows both sides of the redirect:
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+```
 
-    ```
-    client1.test → https://client1.vercel.app
-    ```
-  * Selecting a suggestion or pressing Enter navigates instantly.
+### 2. Copy it and rename:
 
----
+```
+supabase.js
+```
 
-### 🧩 2. Popup Interface (`popup.html` + `popup.js`)
+### 3. Add to `.gitignore`:
 
-* Provides a friendly UI for managing mappings.
-* Input fields:
+```
+supabase.js
+```
 
-  * **Short name** → used as `.test` domain (e.g., `client1`)
-  * **Destination URL** → redirect target (e.g., `https://client1.vercel.app`)
-* Displays all saved mappings in a scrollable list.
-* Supports easy delete and update functionality.
-* Updates storage and UI in real time.
+### 4. Insert **your** URL + ANON key inside `supabase.js`.
 
----
-
-## 🧩 Manifest Details (`manifest.json`)
-
-* **Manifest Version:** 3
-* **Permissions:**
-
-  * `storage` – Save domain mappings persistently.
-  * `webNavigation` – Intercept `.test` navigations.
-  * `tabs` – Open or update browser tabs.
-* **Host Permissions:** `<all_urls>`
-* **Omnibox Keyword:** `site`
-* **Background:** `background.js` as service worker.
-* **Action:** Popup window (`popup.html`).
+Done.
+This keeps your real keys safe while letting the extension run normally.
 
 ---
 
-## 💻 Installation (Developer Mode)
+# ⚙️ How It Works
 
-1. Open **Chrome** and navigate to:
+## 1. Background Logic (`background.js`)
+
+### 🔄 Redirect Interception
+
+Intercepts navigation to:
+
+```
+*.test
+```
+
+Preserves:
+
+* Path
+* Query
+* Hash
+
+### 💬 Omnibox (`site`)
+
+Provides matching suggestions based on redirect mappings.
+
+---
+
+## 2. Popup Interface (`popup.html` + `popup.js`)
+
+### Local + Cloud Merge Flow
+
+1. Load local mappings instantly
+2. Fetch cloud mappings in background
+3. Merge them
+4. Save merged version locally
+5. Render updated list
+
+This gives **instant UI + accurate cloud sync**.
+
+---
+
+## 3. Authentication (`auth.html`)
+
+Includes:
+
+* Email/password sign up
+* Email/password login
+* Error feedback
+* Beautiful UI/UX
+* Redirect to main popup after login
+
+---
+
+# 💻 Installation (Developer Mode)
+
+1. Open Chrome
+2. Visit:
 
    ```
    chrome://extensions
    ```
-2. Enable **Developer mode** (toggle in the top-right corner).
-3. Click **“Load unpacked”**.
-4. Select your project folder containing `manifest.json`.
-5. The **Team Redirect Manager** icon will appear in your toolbar 🎉
+3. Enable **Developer mode**
+4. Click **Load Unpacked**
+5. Select the folder containing `manifest.json`
 
 ---
 
-## 🧠 Usage
+# 🧠 Usage
 
-### ▶️ Popup Interface
+### ▶️ Using the Popup
 
-1. Click the **Team Redirect Manager** icon in Chrome.
-2. Add a new redirect:
+1. Open the extension
+
+2. Add:
 
    * **Short name:** `client1`
-   * **Destination URL:** `https://client1.vercel.app`
-3. Click **Add / Update**.
-4. Visit `client1.test` in Chrome — you’ll be redirected automatically.
+   * **URL:** `https://client1.vercel.app`
 
-### 💬 Omnibox Command
+3. Visit:
 
-1. In the address bar, type:
+```
+client1.test
+```
 
-   ```
-   site client
-   ```
-2. Choose from the live suggestions:
-
-   ```
-   client1.test → https://client1.vercel.app
-   ```
-3. Hit **Enter** — Chrome opens the mapped URL instantly.
+Redirects instantly.
 
 ---
 
-## 🧹 Managing Redirects
+### 💬 Using the Omnibox
 
-* 🗑️ **Delete:** Click the × button beside any mapping.
-* ✏️ **Update:** Re-add a mapping with the same name but a new URL.
-* 🔄 Changes sync automatically — no reload required.
+1. Type:
 
----
+```
+site client
+```
 
-## ⚠️ Notes & Limitations
+2. Choose suggestion:
 
-* Works **only for `.test` domains**.
-* Requires **Chrome 88+** (Manifest V3 support).
-* Redirects only affect **navigation requests** — not fetch/XHR requests.
-* URLs must start with `http://` or `https://`.
-* Omnibox commands currently support one keyword: `site`.
+```
+client1.test → https://client1.vercel.app
+```
 
----
-
-## 🧩 Upcoming Enhancements
-
-* 🗂️ Add optional descriptions for each redirect.
-* ☁️ Sync mappings via Firebase or a shared backend.
-* ⌨️ Add `/add` command for quick creation via Omnibox.
-* 🔐 Team-based sharing and cloud sync.
+3. Press Enter
+   ➡ Opens the mapped site instantly.
 
 ---
 
-## 📜 License
+# 🗂️ Managing Redirects
+
+* **Delete** → With confirmation
+* **Update** → Re-add with same name
+* **Cloud + Local Sync** → Automatic
+* **Logout** → Clears session & local storage
+
+---
+
+# ⚠️ Notes & Limitations
+
+* Only `.test` domains are supported
+* Chrome MV3 required (Chrome 88+)
+* Redirects only affect navigations (not XHR/fetch)
+* URLs must include `http://` or `https://`
+
+---
+
+# 🧩 Future Enhancements
+
+* Editing redirect entries
+* Tagging and grouping redirects
+* Shared team cloud space
+* Omnibox quick-add command
+* Sync status indicators
+* Import/export mappings
+
+---
+
+# 📜 License
 
 **MIT License**
-Free to use, modify, and share for personal or team development projects.
+Free to use, modify, and distribute.
