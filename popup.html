@@ -5,16 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redirect Manager</title>
     <link rel="stylesheet" href="popup.css" />
+
+    <!-- Load supabase FROM LOCAL FILE (required for Chrome extension CSP) -->
+    <script src="supabase-lib.js"></script>
+    <script src="supabase.js"></script>
+    <script src="auth-check.js"></script>
   </head>
+
   <body>
     <div class="container">
       <h2>⚙️ Team Redirect Manager</h2>
-      <p class="subtitle">
-        Manage your <strong>.test</strong> redirects easily
-      </p>
+      <p class="subtitle">Manage your <strong>.test</strong> redirects easily</p>
 
       <div class="card">
         <label for="name" class="label">Short name</label>
+
         <div class="domain-row">
           <input
             id="name"
@@ -24,6 +29,7 @@
           />
           <span class="tld">.test</span>
         </div>
+
         <div class="full">
           <label for="url" class="label">Destination URL</label>
           <input
@@ -44,6 +50,9 @@
       <footer>
         <p>🌐 Works only for <strong>.test</strong> domains</p>
       </footer>
+
+      <button id="logout-btn" class="btn logout-btn">Logout</button>
+
     </div>
 
     <script src="popup.js"></script>

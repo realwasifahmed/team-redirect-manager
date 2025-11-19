@@ -168,3 +168,14 @@ footer {
   color: #9ca3af;
   margin-top: 1rem;
 }
+
+.logout-btn {
+  margin-top: 20px;
+  width: 100%;
+  background: #e11d48;
+  color: white;
+  font-weight: bold;
+}
+.logout-btn:hover {
+  background: #be123c;
+}

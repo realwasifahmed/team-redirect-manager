@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login / Sign Up</title>
+    <link rel="stylesheet" href="auth.css" />
+
+    <!-- Load Supabase LOCALLY (Required for Chrome Extension CSP) -->
+    <script src="supabase-lib.js"></script>
+    <script src="supabase.js"></script>
+    <script src="auth.js"></script>
+  </head>
+
+  <body>
+    <div class="auth-wrapper">
+      <div class="auth-card">
+        <h2 class="title">🔐 Team Redirect Manager</h2>
+        <p class="subtitle">Access your synced redirects</p>
+
+        <div class="input-group">
+          <label>Email</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            class="input"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            class="input"
+          />
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <button id="login-btn" class="btn primary full">Login</button>
+
+        <div class="divider">
+          <span>OR</span>
+        </div>
+
+        <button id="signup-btn" class="btn secondary full">Create Account</button>
+      </div>
+    </div>
+  </body>
+</html>

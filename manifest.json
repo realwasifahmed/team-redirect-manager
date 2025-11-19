@@ -3,16 +3,31 @@
   "name": "Team Redirect Manager",
   "version": "1.2",
   "description": "Manage and redirect .test domains locally for your team.",
+
   "permissions": ["storage", "webNavigation", "tabs"],
   "host_permissions": ["<all_urls>"],
+
   "omnibox": { "keyword": "site" },
+
   "background": {
     "service_worker": "background.js"
   },
+
   "action": {
     "default_popup": "popup.html"
   },
+
   "icons": {
     "128": "icons/icon128.png"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["supabase-lib.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   }
 }

@@ -1,0 +1,140 @@
+/* Background */
+body {
+  font-family: "Inter", sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* Center wrapper */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Card */
+.auth-card {
+  width: 340px;
+  padding: 28px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+/* Title */
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.subtitle {
+  margin-top: 6px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Input Group */
+.input-group {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.input:focus {
+  border-color: #4f46e5;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
+  transition: background 0.2s ease;
+}
+
+.full {
+  width: 100%;
+}
+
+.btn.primary {
+  background: #4f46e5;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #4338ca;
+}
+
+.btn.secondary {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.btn.secondary:hover {
+  background: #cbd5e1;
+}
+
+/* Divider */
+.divider {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.divider span {
+  flex: 1;
+  padding: 0 10px;
+  position: relative;
+}
+
+.divider span::before,
+.divider span::after {
+  content: "";
+  height: 1px;
+  background: #e2e8f0;
+  flex: 1;
+}
+
+.divider span::before {
+  margin-right: 10px;
+}
+
+.divider span::after {
+  margin-left: 10px;
+}
+
+/* Message box */
+.message {
+  margin-bottom: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 18px;
+}
